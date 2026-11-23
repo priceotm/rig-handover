@@ -53,6 +53,7 @@ function toRow(job: string, lines: RunLine[]): DigestRow {
     owner,
     runs: lines.length,
     retries: lines.filter((l) => l.status === 'retry').length,
+    fails: lines.filter((l) => l.status === 'fail').length,
     lastStatus: last.status,
     lastError: last.error ?? null,
     firstAt: first.at,

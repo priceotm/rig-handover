@@ -47,3 +47,12 @@ describe('readNight', () => {
     });
   });
 });
+
+import { nightCounts } from '../src/digest/counts.js';
+
+describe('night counts', () => {
+  it('counts run lines per status for 2026-10-28', () => {
+    const night = readNight('runs', '2026-10-28');
+    expect(night && nightCounts(night)).toEqual({ ok: 10, retry: 4, fail: 1 });
+  });
+});

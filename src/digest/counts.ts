@@ -1,10 +1,9 @@
 import type { Night } from './types.js';
 
-// retry = sum of row.retries; fail = rows whose lastStatus is 'fail'; ok = rows whose lastStatus is 'ok'.
+// Run lines per status for the night: ok + retry + fail = all runs that parsed.
 export function nightCounts(night: Night): { ok: number; retry: number; fail: number } {
-  return {
-    retry: night.rows.reduce((n, r) => n + r.retries, 0),
-    fail: night.rows.filter((r) => r.lastStatus === 'fail').length,
-    ok: night.rows.filter((r) => r.lastStatus === 'ok').length,
-  };
+  const sum = (pick: (r: Night['rows'][number]) => number) => night.rows.reduce((n, r) => n + pick(r), 0);
+  const retry = sum((r) => r.retries);
+  const fail = sum((r) => r.fails);
+  return { ok: sum((r) => r.runs) - retry - fail, retry, fail };
 }
